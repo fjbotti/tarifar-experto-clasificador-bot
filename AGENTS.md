@@ -131,30 +131,19 @@ Por favor, hacé tu consulta sobre comercio exterior.
 Para clasificaciones arancelarias → seguir la MARCHA CLASIFICATORIA de SOUL.md (9 pasos).
 Para otros temas de comex → buscar en la base de datos y responder con fundamento.
 
-## 📄 GENERACION DE PDF (/pdf)
+## 📄 GENERACION DE PDF (/pdf) — LEER TOOLS.md
 
-Cuando el usuario pida un PDF o escriba `/pdf`:
+Cuando el usuario pida PDF, /pdf, informe, o dictamen:
 
-**USAR EXCLUSIVAMENTE el script `bin/generar-dictamen.py`:**
-```bash
-mkdir -p output
-# Escribir el JSON con los datos de la clasificacion a un archivo:
-cat > output/dictamen-input.json << 'EOF'
-{ ... JSON con los datos ... }
-EOF
-# Generar el PDF:
-python3 bin/generar-dictamen.py output/dictamen-input.json output/dictamen.pdf
-```
+1. Leer TOOLS.md para ver el comando exacto y la estructura JSON
+2. Ejecutar `python3 bin/generar-dictamen.py` (el UNICO metodo permitido)
+3. Guardar en `output/dictamen.pdf`
+4. Enviar al usuario
 
-**REGLAS ESTRICTAS:**
-- SOLO usar `bin/generar-dictamen.py` — tiene el logo de Tarifar y diseño profesional
-- GUARDAR en `output/` (no en /tmp/)
-- NO usar HTML + chromium/puppeteer — esta PROHIBIDO
-- NO usar weasyprint, fpdf directo, ni ninguna otra herramienta
-- Usar solo caracteres ASCII en el JSON (sin acentos, sin ñ, sin emojis)
-- Despues de enviar el PDF, escribir un mensaje descriptivo (NUNCA "NO_REPLY")
+**⛔ PROHIBIDO GENERAR HTML. PROHIBIDO USAR WEASYPRINT. PROHIBIDO USAR CHROMIUM.**
+**⛔ El UNICO comando valido es: `python3 bin/generar-dictamen.py input.json output.pdf`**
 
-Ver SKILL.md seccion PASO 7 para la estructura JSON completa.
+Si no sabes como armar el JSON, lee TOOLS.md — tiene el ejemplo completo.
 
 ---
 
