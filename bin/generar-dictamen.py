@@ -95,13 +95,15 @@ EJEMPLO_JSON = {
 class DictamenPDF(FPDF):
     """PDF generator for classification dictamen."""
 
-    MARGIN = 15
+    MARGIN = 20
     BLUE = (22, 33, 62)       # #16213e
-    RED = (233, 69, 96)       # #e94560
-    GRAY = (100, 100, 100)
-    LIGHT_BG = (245, 247, 250)
+    ORANGE = (233, 147, 46)   # Tarifar orange
+    RED = (200, 60, 60)
+    GRAY = (140, 140, 140)
+    LIGHT_GRAY = (200, 200, 200)
+    LIGHT_BG = (248, 248, 248)
     WHITE = (255, 255, 255)
-    BLACK = (30, 30, 30)
+    BLACK = (40, 40, 40)
 
     def __init__(self):
         super().__init__()
@@ -110,79 +112,72 @@ class DictamenPDF(FPDF):
 
     def header(self):
         if self.page_no() == 1:
-            return  # First page has custom header
-        self.set_font("Helvetica", "I", 8)
+            return
+        # Minimal header for subsequent pages
+        logo_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "logo-tarifar.png")
+        if os.path.exists(logo_path):
+            self.image(logo_path, x=self.MARGIN, y=8, h=8)
+        self.set_font("Helvetica", "", 8)
         self.set_text_color(*self.GRAY)
-        self.cell(0, 8, "Dictamen de Clasificacion Arancelaria - Tarifar", align="L")
-        self.cell(0, 8, f"Pagina {self.page_no()}", align="R", new_x="LMARGIN", new_y="NEXT")
-        self.line(self.MARGIN, self.get_y(), self.w - self.MARGIN, self.get_y())
-        self.ln(5)
+        self.cell(0, 8, f"Pagina {self.page_no()}", align="R")
+        self.set_y(20)
+        self.set_draw_color(*self.LIGHT_GRAY)
+        self.set_line_width(0.3)
+        self.line(self.MARGIN, 18, self.w - self.MARGIN, 18)
+        self.ln(3)
 
     def footer(self):
-        # Orange line above footer
-        self.set_draw_color(233, 147, 46)
-        self.set_line_width(0.5)
-        self.line(self.MARGIN, self.h - 17, self.w - self.MARGIN, self.h - 17)
-        self.set_y(-15)
-        self.set_font("Helvetica", "B", 7)
-        self.set_text_color(*self.BLUE)
-        self.cell(0, 5, "Tarifar  |  Comercio Exterior", align="L")
-        self.set_font("Helvetica", "I", 7)
+        self.set_draw_color(*self.LIGHT_GRAY)
+        self.set_line_width(0.3)
+        self.line(self.MARGIN, self.h - 15, self.w - self.MARGIN, self.h - 15)
+        self.set_y(-13)
+        self.set_font("Helvetica", "", 7)
         self.set_text_color(*self.GRAY)
-        self.cell(0, 5, f"Pagina {self.page_no()}/{{nb}}", align="R", new_x="LMARGIN", new_y="NEXT")
-        self.set_font("Helvetica", "I", 6)
-        self.cell(0, 4, "Generado automaticamente  |  www.tarifar.com", align="L")
+        self.cell(0, 5, "tarifar.com", align="L")
+        self.cell(0, 5, f"{self.page_no()} / {{nb}}", align="R")
 
     def title_block(self, data):
-        """Draw the title block on page 1."""
-        header_h = 58
-        # Blue header bar
-        self.set_fill_color(*self.BLUE)
-        self.rect(0, 0, self.w, header_h, style="F")
-
-        # Orange accent line at bottom of header
-        self.set_fill_color(233, 147, 46)  # Tarifar orange
-        self.rect(0, header_h, self.w, 1.5, style="F")
-
-        # Logo - centered, large
-        logo_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "logo-tarifar-header.png")
+        """Draw the title block on page 1 — minimal white background."""
+        # Logo - left aligned, generous size
+        logo_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "logo-tarifar.png")
         if os.path.exists(logo_path):
-            logo_h = 18
-            # Center the logo horizontally (aspect ratio ~247:60 = ~4.1:1)
-            logo_w = logo_h * (247 / 60)
-            logo_x = (self.w - logo_w) / 2
-            self.image(logo_path, x=logo_x, y=5, h=logo_h)
-            self.set_y(26)
-        else:
-            self.set_y(8)
+            self.image(logo_path, x=self.MARGIN, y=15, h=15)
 
-        self.set_font("Helvetica", "B", 18)
-        self.set_text_color(*self.WHITE)
-        self.cell(0, 9, "DICTAMEN DE CLASIFICACION", align="C", new_x="LMARGIN", new_y="NEXT")
-        self.set_font("Helvetica", "", 13)
-        self.cell(0, 7, "ARANCELARIA", align="C", new_x="LMARGIN", new_y="NEXT")
+        # Thin line separator
+        self.set_draw_color(*self.LIGHT_GRAY)
+        self.set_line_width(0.3)
+        self.line(self.MARGIN, 35, self.w - self.MARGIN, 35)
 
-        # Reference and date - lighter text
-        self.set_font("Helvetica", "", 9)
-        self.set_text_color(200, 210, 230)
+        # Title
+        self.set_y(40)
+        self.set_font("Helvetica", "B", 22)
+        self.set_text_color(*self.BLUE)
+        self.cell(0, 10, "Dictamen de Clasificacion", new_x="LMARGIN", new_y="NEXT")
+        self.set_font("Helvetica", "", 22)
+        self.set_text_color(*self.BLACK)
+        self.cell(0, 10, "Arancelaria", new_x="LMARGIN", new_y="NEXT")
+
+        # Reference and date - right aligned, subtle
         id_tramite = data.get("id_tramite", "S/N")
         fecha = data.get("fecha", datetime.now().strftime("%Y-%m-%d"))
-        self.cell(0, 7, f"Ref: {id_tramite}  |  Fecha: {fecha}", align="C", new_x="LMARGIN", new_y="NEXT")
+        self.set_font("Helvetica", "", 9)
+        self.set_text_color(*self.GRAY)
+        self.set_y(40)
+        self.cell(0, 6, f"Ref: {id_tramite}", align="R", new_x="LMARGIN", new_y="NEXT")
+        self.cell(0, 5, f"Fecha: {fecha}", align="R", new_x="LMARGIN", new_y="NEXT")
 
-        self.set_y(header_h + 5)
+        self.set_y(65)
 
     def section_title(self, number, title):
-        """Draw a section title."""
-        self.ln(3)
-        self.set_font("Helvetica", "B", 12)
+        """Draw a section title — minimal style."""
+        self.ln(5)
+        self.set_font("Helvetica", "", 8)
+        self.set_text_color(*self.ORANGE)
+        self.cell(8, 7, f"{number}")
+        self.set_font("Helvetica", "B", 11)
         self.set_text_color(*self.BLUE)
-        self.cell(0, 8, f"{number}. {title}", new_x="LMARGIN", new_y="NEXT")
-        y = self.get_y()
-        self.set_draw_color(*self.RED)
-        self.set_line_width(0.8)
-        self.line(self.MARGIN, y, self.MARGIN + 40, y)
-        self.set_line_width(0.2)
-        self.ln(3)
+        self.cell(0, 7, title.upper(), new_x="LMARGIN", new_y="NEXT")
+        self.ln(2)
 
     def label_value(self, label, value, bold_value=False):
         """Draw a label: value pair."""
@@ -212,58 +207,71 @@ class DictamenPDF(FPDF):
         self.multi_cell(self.w - 2 * self.MARGIN - indent - 5, 5, text, new_x="LMARGIN", new_y="NEXT")
 
     def highlight_box(self, text, bg_color=None):
-        """Draw a highlighted box."""
-        if bg_color is None:
-            bg_color = self.LIGHT_BG
-        self.set_fill_color(*bg_color)
-        self.set_font("Helvetica", "B", 11)
-        self.set_text_color(*self.BLUE)
+        """Draw a highlighted box — minimal with left accent."""
         x = self.MARGIN
         y = self.get_y()
         w = self.w - 2 * self.MARGIN
-        self.rect(x, y, w, 12, style="F")
-        self.set_xy(x + 5, y + 2)
-        self.cell(w - 10, 8, text)
-        self.set_y(y + 15)
+        # Left accent bar
+        self.set_fill_color(*self.ORANGE)
+        self.rect(x, y, 2, 14, style="F")
+        # Light background
+        self.set_fill_color(*self.LIGHT_BG)
+        self.rect(x + 2, y, w - 2, 14, style="F")
+        # Text
+        self.set_font("Helvetica", "B", 12)
+        self.set_text_color(*self.BLUE)
+        self.set_xy(x + 8, y + 3)
+        self.cell(w - 12, 8, text)
+        self.set_y(y + 18)
 
     def exclusion_item(self, codigo, motivo):
-        """Draw an exclusion item."""
+        """Draw an exclusion item — minimal."""
         self.set_font("Helvetica", "B", 9)
         self.set_text_color(*self.RED)
-        self.set_x(self.MARGIN + 10)
-        self.cell(5, 5, "X")
-        self.set_text_color(*self.BLACK)
-        self.cell(30, 5, f"  {codigo}")
-        self.set_font("Helvetica", "", 9)
-        self.multi_cell(0, 5, f" - {motivo}", new_x="LMARGIN", new_y="NEXT")
+        self.set_x(self.MARGIN + 5)
+        self.cell(25, 5, codigo)
+        self.set_font("Helvetica", "", 8)
+        self.set_text_color(*self.GRAY)
+        self.multi_cell(0, 5, motivo, new_x="LMARGIN", new_y="NEXT")
 
     def confidence_bar(self, percentage):
-        """Draw a confidence percentage bar."""
-        x = self.MARGIN + 10
+        """Draw a confidence percentage — minimal circular style."""
+        x = self.MARGIN + 5
         y = self.get_y() + 2
-        bar_w = 100
-        bar_h = 8
 
-        # Background
-        self.set_fill_color(220, 220, 220)
-        self.rect(x, y, bar_w, bar_h, style="F")
-
-        # Fill
+        # Simple: large number + thin bar
+        self.set_font("Helvetica", "B", 28)
         if percentage >= 70:
-            self.set_fill_color(39, 174, 96)  # green
+            self.set_text_color(39, 174, 96)
         elif percentage >= 50:
-            self.set_fill_color(245, 166, 35)  # yellow
+            self.set_text_color(*self.ORANGE)
         else:
-            self.set_fill_color(233, 69, 96)  # red
-        self.rect(x, y, bar_w * percentage / 100, bar_h, style="F")
-
-        # Text
-        self.set_font("Helvetica", "B", 9)
-        self.set_text_color(*self.WHITE)
+            self.set_text_color(*self.RED)
         self.set_xy(x, y)
-        self.cell(bar_w, bar_h, f"{percentage}%", align="C")
+        self.cell(30, 15, f"{percentage}%")
 
-        self.set_y(y + bar_h + 5)
+        # Label
+        self.set_font("Helvetica", "", 9)
+        self.set_text_color(*self.GRAY)
+        self.set_xy(x + 32, y + 4)
+        self.cell(40, 8, "confianza")
+
+        # Thin bar
+        bar_x = x + 65
+        bar_w = 80
+        bar_h = 3
+        bar_y = y + 7
+        self.set_fill_color(235, 235, 235)
+        self.rect(bar_x, bar_y, bar_w, bar_h, style="F")
+        if percentage >= 70:
+            self.set_fill_color(39, 174, 96)
+        elif percentage >= 50:
+            self.set_fill_color(*self.ORANGE)
+        else:
+            self.set_fill_color(*self.RED)
+        self.rect(bar_x, bar_y, bar_w * percentage / 100, bar_h, style="F")
+
+        self.set_y(y + 20)
 
 
 def generate_dictamen(data, output_path):
