@@ -469,67 +469,13 @@ Tu producto **"[nombre]"** se clasifica en **XXXX.XX.XX.XXXZ**.
 
 ### PASO 7: Generación del Dictamen PDF
 
-Al finalizar la clasificación (confianza ≥ 70%), **ofrecer al usuario** la generación de un dictamen formal en PDF.
+Al finalizar la clasificación (confianza >= 70%), **ofrecer al usuario** la generación de un informe formal en PDF.
 
-**Contenido del dictamen PDF:**
+**OBLIGATORIO: Usar el script `bin/generar-dictamen.py`**
 
-```
-═══════════════════════════════════════════════
-DICTAMEN DE CLASIFICACIÓN ARANCELARIA
-Ref: [ID-TRÁMITE] | Fecha: [FECHA]
-═══════════════════════════════════════════════
+NO generar el PDF de otra forma (no usar markdown-to-pdf, no usar otras librerías, no generar HTML). El script ya tiene el diseño con el logo de Tarifar, formato profesional y todas las secciones.
 
-1. PRODUCTO
-   Descripción: [descripción completa]
-   Origen: [país de origen]
-   Uso/Destino: [uso declarado]
-
-2. CLASIFICACIÓN SUGERIDA
-   Posición NCM: XXXX.XX.XX
-   Posición SIM: XXXX.XX.XX.XXXZ
-   Descripción oficial: [texto de la nomenclatura]
-
-3. FUNDAMENTO LEGAL
-   3.1 Reglas Generales Interpretativas aplicadas:
-       - RGI X: [justificación]
-   3.2 Notas legales consultadas:
-       - Nota Sección XX: [resumen]
-       - Nota Capítulo YY: [resumen]
-       - Nota Explicativa partida YY.ZZ: [resumen]
-       - Nota Complementaria (si aplica): [resumen]
-   3.3 Precedentes (Resoluciones de Clasificación):
-       - Dictamen Nº [número]: [producto similar clasificado en...]
-
-4. POSICIONES DESCARTADAS
-   - XXXX.XX.XX: Descartada por [motivo + cita de nota]
-   - YYYY.YY.YY: Descartada por [motivo + cita de nota]
-
-5. INFORMACIÓN ARANCELARIA
-   - AEC/DIE: XX%
-   - Tasa Estadística: X%
-   - IVA: 21%
-   - IVA Adicional: X%
-   - Derechos Antidumping: [si aplica]
-   - Intervenciones: [ANMAT/SENASA/etc.]
-   - Licencias: [LNA/LA si aplica]
-
-6. NIVEL DE CONFIANZA: XX%
-
-7. DISCLAIMER
-   Este dictamen es una sugerencia técnica basada en la información
-   proporcionada y las fuentes consultadas. NO constituye una
-   clasificación oficial ni vinculante. Se recomienda verificación
-   con un despachante de aduanas matriculado y/o consulta vinculante
-   ante la Dirección General de Aduanas (ARCA).
-
-   Fuentes: Tarifar MCP, Nomenclatura Común del Mercosur,
-   Sistema Armonizado (OMA), Notas Explicativas del SA.
-═══════════════════════════════════════════════
-```
-
-**Implementación técnica:**
-
-Usar el script `bin/generar-dictamen.py` que genera el PDF a partir de un JSON estructurado:
+**Comando para generar el PDF:**
 
 ```bash
 # Generar PDF desde JSON en stdin
@@ -539,37 +485,72 @@ echo '{ ... }' | python3 bin/generar-dictamen.py - /tmp/dictamen-CLF-XXX.pdf
 python3 bin/generar-dictamen.py datos.json /tmp/dictamen.pdf
 ```
 
-**Estructura JSON requerida:**
+**Estructura JSON requerida (COMPLETA):**
 ```json
 {
-  "id_tramite": "CLF-2026-XXXX",
+  "id_tramite": "TAR-2026-XX-XXXX",
   "fecha": "2026-03-08",
   "producto": {
     "descripcion": "...",
     "origen": "...",
-    "uso": "..."
+    "uso": "...",
+    "caracteristicas": {"Conectividad": "WiFi/BT", "Pantalla": "OLED"}
   },
   "clasificacion": {
     "ncm": "XXXX.XX.XX",
-    "sim": "XXXX.XX.XX.XXXZ",
+    "sim": "XXXX.XX.XX.XXX Z",
     "descripcion_oficial": "..."
   },
+  "jerarquia": [
+    {"nivel": "Seccion XVI", "detalle": "..."},
+    {"nivel": "Capitulo 85", "detalle": "..."},
+    {"nivel": "Partida 8517", "detalle": "..."},
+    {"nivel": "Subpartida 8517.62", "detalle": "..."},
+    {"nivel": "Item NCM 8517.62.72", "detalle": "..."},
+    {"nivel": "Sub-item SIM .900 U", "detalle": "..."}
+  ],
   "fundamento": {
     "rgi": [{"regla": "RGI 1", "aplicacion": "..."}],
     "notas_consultadas": [{"tipo": "Capitulo XX", "contenido": "..."}],
     "precedentes": [{"dictamen": "DI-XXXX-XXXX", "descripcion": "..."}]
   },
+  "marcha_clasificatoria": [
+    {"titulo": "Analisis del producto", "detalle": "..."},
+    {"titulo": "Seccion y Capitulo", "detalle": "..."},
+    {"titulo": "Notas Explicativas", "detalle": "..."},
+    {"titulo": "Busqueda en DB", "detalle": "..."},
+    {"titulo": "Verificacion de codigos", "detalle": "..."},
+    {"titulo": "Resoluciones", "detalle": "..."},
+    {"titulo": "RGI aplicadas", "detalle": "..."},
+    {"titulo": "Observaciones", "detalle": "..."}
+  ],
+  "comparativo": [
+    {"posicion": "8517.62.72", "descripcion": "...", "die": "0%", "iva": "10.5%", "resultado": "SELECCIONADA"},
+    {"posicion": "9102.xx", "descripcion": "Relojes", "die": "20%", "iva": "21%", "resultado": "Excl. Nota 1"}
+  ],
   "exclusiones": [{"codigo": "XXXX.XX", "motivo": "..."}],
   "aranceles": {
     "die": "XX%", "tasa_estadistica": "X%", "iva": "21%",
-    "iva_adicional": "XX%", "iibb": "X%",
+    "iva_adicional": "XX%", "iibb": "X%", "ganancias": "6%",
     "antidumping": null, "intervenciones": [], "licencias": null
   },
-  "confianza": 85
+  "calculo_cif": {
+    "valor_cif": "500",
+    "desglose": [
+      {"concepto": "DIE", "alicuota": "0%", "monto": "0"},
+      {"concepto": "IVA", "alicuota": "10.5%", "monto": "52.50"}
+    ],
+    "total_tributos": "145.00",
+    "costo_total": "645.00"
+  },
+  "observaciones": [
+    {"titulo": "Regulacion baterias litio", "detalle": "Tramitar autorizacion..."}
+  ],
+  "confianza": 92
 }
 ```
 
-**IMPORTANTE**: Usar solo caracteres ASCII/latin-1 en el JSON (no acentos, no ñ, no emojis). Reemplazar: a→a, e→e, i→i, o→o, u→u, ñ→n.
+**IMPORTANTE**: Usar solo caracteres ASCII/latin-1 en el JSON (no acentos, no n con tilde, no emojis). Reemplazar: a con acento → a, e con acento → e, n con tilde → n.
 
 **Cuándo generar:**
 - Siempre ofrecer al usuario al final de una clasificacion: "Queres que te genere el dictamen en PDF?"
