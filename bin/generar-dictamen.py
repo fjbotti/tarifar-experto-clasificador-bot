@@ -119,40 +119,57 @@ class DictamenPDF(FPDF):
         self.ln(5)
 
     def footer(self):
+        # Orange line above footer
+        self.set_draw_color(233, 147, 46)
+        self.set_line_width(0.5)
+        self.line(self.MARGIN, self.h - 17, self.w - self.MARGIN, self.h - 17)
         self.set_y(-15)
+        self.set_font("Helvetica", "B", 7)
+        self.set_text_color(*self.BLUE)
+        self.cell(0, 5, "Tarifar  |  Comercio Exterior", align="L")
         self.set_font("Helvetica", "I", 7)
         self.set_text_color(*self.GRAY)
-        self.cell(0, 10, f"Generado automaticamente | Tarifar x Clasificador Aduanero | Pagina {self.page_no()}/{{nb}}",
-                  align="C")
+        self.cell(0, 5, f"Pagina {self.page_no()}/{{nb}}", align="R", new_x="LMARGIN", new_y="NEXT")
+        self.set_font("Helvetica", "I", 6)
+        self.cell(0, 4, "Generado automaticamente  |  www.tarifar.com", align="L")
 
     def title_block(self, data):
         """Draw the title block on page 1."""
+        header_h = 58
         # Blue header bar
         self.set_fill_color(*self.BLUE)
-        self.rect(0, 0, self.w, 50, style="F")
+        self.rect(0, 0, self.w, header_h, style="F")
 
-        # Logo
+        # Orange accent line at bottom of header
+        self.set_fill_color(233, 147, 46)  # Tarifar orange
+        self.rect(0, header_h, self.w, 1.5, style="F")
+
+        # Logo - centered, large
         logo_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "logo-tarifar.png")
         if os.path.exists(logo_path):
-            # Place logo at top-left of header
-            self.image(logo_path, x=15, y=5, h=12)
-            self.set_y(20)
+            logo_h = 18
+            # Center the logo horizontally (aspect ratio ~247:60 = ~4.1:1)
+            logo_w = logo_h * (247 / 60)
+            logo_x = (self.w - logo_w) / 2
+            self.image(logo_path, x=logo_x, y=5, h=logo_h)
+            self.set_y(26)
         else:
             self.set_y(8)
 
-        self.set_font("Helvetica", "B", 20)
+        self.set_font("Helvetica", "B", 18)
         self.set_text_color(*self.WHITE)
-        self.cell(0, 10, "DICTAMEN DE CLASIFICACION", align="C", new_x="LMARGIN", new_y="NEXT")
-        self.set_font("Helvetica", "", 14)
-        self.cell(0, 8, "ARANCELARIA", align="C", new_x="LMARGIN", new_y="NEXT")
+        self.cell(0, 9, "DICTAMEN DE CLASIFICACION", align="C", new_x="LMARGIN", new_y="NEXT")
+        self.set_font("Helvetica", "", 13)
+        self.cell(0, 7, "ARANCELARIA", align="C", new_x="LMARGIN", new_y="NEXT")
 
-        # Reference and date
-        self.set_font("Helvetica", "", 10)
+        # Reference and date - lighter text
+        self.set_font("Helvetica", "", 9)
+        self.set_text_color(200, 210, 230)
         id_tramite = data.get("id_tramite", "S/N")
         fecha = data.get("fecha", datetime.now().strftime("%Y-%m-%d"))
-        self.cell(0, 8, f"Ref: {id_tramite}  |  Fecha: {fecha}", align="C", new_x="LMARGIN", new_y="NEXT")
+        self.cell(0, 7, f"Ref: {id_tramite}  |  Fecha: {fecha}", align="C", new_x="LMARGIN", new_y="NEXT")
 
-        self.set_y(55)
+        self.set_y(header_h + 5)
 
     def section_title(self, number, title):
         """Draw a section title."""
