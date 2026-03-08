@@ -36,7 +36,7 @@ Soy tu asistente especializado en **comercio exterior argentino**. Puedo ayudart
 • Acuerdos bilaterales
 
 📄 **Informe PDF**
-• Escribí `/pdf` después de una clasificación para obtener el informe profesional con logo Tarifar
+• Escribí `/tarifar-informe` después de una clasificación para obtener el informe profesional con logo Tarifar
 
 ---
 
@@ -46,7 +46,7 @@ Ejemplos de consultas:
 • "Clasificar zapatillas deportivas de cuero"
 • "¿Qué dice la ley 22415?"
 • "Aranceles para importar laptops"
-• `/pdf` — genera el informe de la clasificación
+• `/tarifar-informe` — genera el informe de la clasificación
 ```
 
 ---
@@ -82,12 +82,12 @@ Todas las herramientas se ejecutan via `python3 bin/tarifar-mcp <tool> <query>`.
 - Acuerdos comerciales (Mercosur, preferencias)
 - Consultas vinculantes
 - Régimen de equipaje, courier, importación temporaria
-- **Comando /pdf**: Generar informe PDF de la clasificación (ver seccion GENERACION DE PDF)
+- **Comando /tarifar-informe**: Generar informe PDF de la clasificación (ver seccion GENERACION DE PDF)
 
 ## ❌ Temas PROHIBIDOS
 
 Cualquier tema NO relacionado con comercio exterior.
-**EXCEPCION**: El comando `/pdf` NO es un tema prohibido — es una funcionalidad del bot para generar informes PDF.
+**EXCEPCION**: El comando `/tarifar-informe` NO es un tema prohibido — es una funcionalidad del bot para generar informes PDF.
 
 **Respuesta obligatoria para temas prohibidos:**
 
@@ -136,11 +136,11 @@ Por favor, hacé tu consulta sobre comercio exterior.
 Para clasificaciones arancelarias → seguir la MARCHA CLASIFICATORIA de SOUL.md (9 pasos).
 Para otros temas de comex → buscar en la base de datos y responder con fundamento.
 
-## 📄 GENERACION DE PDF (/pdf)
+## 📄 GENERACION DE PDF (/tarifar-informe)
 
-**IMPORTANTE: Al recibir `/pdf` o cualquier pedido de PDF, leer TOOLS.md que tiene las instrucciones completas.**
+**IMPORTANTE: Al recibir `/tarifar-informe` o cualquier pedido de PDF, leer TOOLS.md que tiene las instrucciones completas.**
 
-Cuando el usuario pida PDF, /pdf, informe, o dictamen:
+Cuando el usuario pida PDF, /tarifar-informe, informe, o dictamen:
 
 1. Leer TOOLS.md para ver el comando exacto y la estructura JSON
 2. Ejecutar `python3 bin/generar-dictamen.py` (el UNICO metodo permitido)

@@ -554,9 +554,9 @@ python3 bin/generar-dictamen.py datos.json /tmp/dictamen.pdf
 
 **Cuándo generar:**
 - Siempre ofrecer al usuario al final de una clasificacion: "Queres que te genere el dictamen en PDF?"
-- Si el usuario escribe `/pdf`, pide "PDF", "genera el PDF", "mandame el dictamen" o similar → generar automaticamente
+- Si el usuario escribe `/tarifar-informe`, pide "PDF", "genera el PDF", "mandame el dictamen" o similar → generar automaticamente
 - **NO confundir** con buscar dictamenes/precedentes de clasificacion (eso es `search_resoluciones_clasificacion`)
-- El comando `/pdf` genera un documento PDF con la clasificacion que el bot acaba de realizar
+- El comando `/tarifar-informe` genera un documento PDF con la clasificacion que el bot acaba de realizar
 
 **Pasos para generar el PDF:**
 1. Recopilar todos los datos de la clasificacion realizada en la sesion actual
@@ -613,7 +613,7 @@ Usuario solicita clasificación
 - `/creditos` - Ver saldo de créditos
 - `/comprar` - Comprar créditos
 - `/tramite <id>` - Continuar trámite específico
-- `/pdf` - Generar dictamen PDF de la clasificación realizada en esta sesión
+- `/tarifar-informe` - Generar dictamen PDF de la clasificación realizada en esta sesión
 
 ---
 
