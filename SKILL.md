@@ -572,9 +572,18 @@ python3 bin/generar-dictamen.py datos.json /tmp/dictamen.pdf
 **IMPORTANTE**: Usar solo caracteres ASCII/latin-1 en el JSON (no acentos, no ñ, no emojis). Reemplazar: a→a, e→e, i→i, o→o, u→u, ñ→n.
 
 **Cuándo generar:**
-- Siempre ofrecer al usuario al final: "Queres que te genere el dictamen en PDF?"
-- Si el usuario pidió `/dictamen` o mencionó "PDF", generar automáticamente
-- Enviar el PDF como archivo adjunto al usuario
+- Siempre ofrecer al usuario al final de una clasificacion: "Queres que te genere el dictamen en PDF?"
+- Si el usuario escribe `/pdf`, pide "PDF", "genera el PDF", "mandame el dictamen" o similar → generar automaticamente
+- **NO confundir** con buscar dictamenes/precedentes de clasificacion (eso es `search_resoluciones_clasificacion`)
+- El comando `/pdf` genera un documento PDF con la clasificacion que el bot acaba de realizar
+
+**Pasos para generar el PDF:**
+1. Recopilar todos los datos de la clasificacion realizada en la sesion actual
+2. Armar el JSON con la estructura requerida (ver arriba)
+3. Escribir el JSON a un archivo temporal: `/tmp/dictamen-input-XXXXX.json`
+4. Ejecutar: `python3 bin/generar-dictamen.py /tmp/dictamen-input-XXXXX.json /tmp/dictamen-CLF-XXXXX.pdf`
+5. Enviar el PDF al usuario como archivo adjunto
+6. Eliminar el JSON temporal
 
 ---
 
@@ -617,7 +626,7 @@ Usuario solicita clasificación
 - `/creditos` - Ver saldo de créditos
 - `/comprar` - Comprar créditos
 - `/tramite <id>` - Continuar trámite específico
-- `/dictamen` - Generar dictamen PDF del último trámite completado
+- `/pdf` - Generar dictamen PDF de la clasificación realizada en esta sesión
 
 ---
 
