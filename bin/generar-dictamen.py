@@ -92,6 +92,11 @@ EJEMPLO_JSON = {
 # PDF GENERATOR
 # ============================================================================
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR = os.path.dirname(SCRIPT_DIR)
+LOGO_PATH = os.path.join(PROJECT_DIR, "assets", "logo-tarifar.png")
+
+
 class DictamenPDF(FPDF):
     """PDF generator for classification dictamen."""
 
@@ -114,7 +119,7 @@ class DictamenPDF(FPDF):
         if self.page_no() == 1:
             return
         # Minimal header for subsequent pages
-        logo_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "logo-tarifar.png")
+        logo_path = LOGO_PATH
         if os.path.exists(logo_path):
             self.image(logo_path, x=self.MARGIN, y=8, h=8)
         self.set_font("Helvetica", "", 8)
@@ -139,7 +144,7 @@ class DictamenPDF(FPDF):
     def title_block(self, data):
         """Draw the title block on page 1 — minimal white background."""
         # Logo - left aligned, generous size
-        logo_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets", "logo-tarifar.png")
+        logo_path = LOGO_PATH
         if os.path.exists(logo_path):
             self.image(logo_path, x=self.MARGIN, y=15, h=15)
 
