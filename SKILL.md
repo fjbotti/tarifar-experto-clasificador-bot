@@ -558,9 +558,13 @@ python3 bin/generar-dictamen.py datos.json /tmp/dictamen.pdf
 - **NO confundir** con buscar dictamenes/precedentes de clasificacion (eso es `search_resoluciones_clasificacion`)
 - El comando `/tarifar-informe` genera un documento PDF con la clasificacion que el bot acaba de realizar
 
+**PREREQUISITO:** Solo se puede generar el PDF si ya se realizo una clasificacion completa en esta sesion (confianza >= 70%). Si el usuario pide /tarifar-informe sin haber clasificado, responder: "Primero necesito realizar una clasificacion. Decime que producto queres clasificar."
+
+**PROHIBIDO re-clasificar para generar el PDF.** Usar UNICAMENTE los datos que ya se obtuvieron durante la clasificacion de esta sesion. NO volver a buscar en Tarifar MCP, NO repetir la marcha clasificatoria, NO consumir tokens adicionales. El PDF se arma con la informacion que ya esta en el historial del chat.
+
 **Pasos para generar el PDF:**
-1. Recopilar todos los datos de la clasificacion realizada en la sesion actual
-2. Armar el JSON con la estructura requerida (ver arriba)
+1. Tomar los datos de la clasificacion YA REALIZADA en esta sesion (del historial de mensajes)
+2. Armar el JSON con la estructura requerida (ver arriba) usando esos datos
 3. Generar un ID unico: `UNIQUE_ID=$(date +%Y%m%d-%H%M%S)-$(head -c 2 /dev/urandom | xxd -p)`
 4. Escribir el JSON: `output/informe-input-${UNIQUE_ID}.json`
 5. Ejecutar: `python3 bin/generar-dictamen.py output/informe-input-${UNIQUE_ID}.json output/informe-clasificacion-${UNIQUE_ID}.pdf`

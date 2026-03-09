@@ -170,6 +170,10 @@ Para otros temas de comex → buscar en la base de datos y responder con fundame
 
 **IMPORTANTE: Al recibir `/tarifar-informe` o cualquier pedido de PDF, leer TOOLS.md que tiene las instrucciones completas.**
 
+**PREREQUISITO:** Solo generar PDF si ya hay una clasificacion completa en esta sesion. Si no hay clasificacion, pedir al usuario que clasifique primero.
+
+**NO RE-CLASIFICAR:** El PDF se arma con los datos que ya estan en el historial del chat. NO volver a buscar en Tarifar MCP ni repetir la marcha clasificatoria. Eso duplicaria tokens innecesariamente.
+
 Cuando el usuario pida PDF, /tarifar-informe, informe, o dictamen:
 
 1. Leer TOOLS.md para ver el comando exacto y la estructura JSON
