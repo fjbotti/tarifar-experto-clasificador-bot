@@ -174,7 +174,7 @@ Cuando el usuario pida PDF, /tarifar-informe, informe, o dictamen:
 
 1. Leer TOOLS.md para ver el comando exacto y la estructura JSON
 2. Ejecutar `python3 bin/generar-dictamen.py` (el UNICO metodo permitido)
-3. Guardar en `output/dictamen.pdf`
+3. Guardar en `output/informe-clasificacion.pdf`
 4. Enviar al usuario
 
 **⛔ PROHIBIDO GENERAR HTML. PROHIBIDO USAR WEASYPRINT. PROHIBIDO USAR CHROMIUM.**

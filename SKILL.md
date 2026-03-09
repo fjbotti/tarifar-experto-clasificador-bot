@@ -553,7 +553,7 @@ python3 bin/generar-dictamen.py datos.json /tmp/dictamen.pdf
 **IMPORTANTE**: Usar solo caracteres ASCII/latin-1 en el JSON (no acentos, no n con tilde, no emojis). Reemplazar: a con acento → a, e con acento → e, n con tilde → n.
 
 **Cuándo generar:**
-- Siempre ofrecer al usuario al final de una clasificacion: "Queres que te genere el dictamen en PDF?"
+- Siempre ofrecer al usuario al final de una clasificacion: "Queres que te genere el informe de clasificacion en PDF?"
 - Si el usuario escribe `/tarifar-informe`, pide "PDF", "genera el PDF", "mandame el dictamen" o similar → generar automaticamente
 - **NO confundir** con buscar dictamenes/precedentes de clasificacion (eso es `search_resoluciones_clasificacion`)
 - El comando `/tarifar-informe` genera un documento PDF con la clasificacion que el bot acaba de realizar
@@ -561,9 +561,9 @@ python3 bin/generar-dictamen.py datos.json /tmp/dictamen.pdf
 **Pasos para generar el PDF:**
 1. Recopilar todos los datos de la clasificacion realizada en la sesion actual
 2. Armar el JSON con la estructura requerida (ver arriba)
-3. Escribir el JSON a un archivo en el workspace: `output/dictamen-input.json`
-4. Ejecutar: `python3 bin/generar-dictamen.py output/dictamen-input.json output/dictamen.pdf`
-5. Enviar el PDF usando la ruta del workspace (NO /tmp): `output/dictamen.pdf`
+3. Escribir el JSON a un archivo en el workspace: `output/informe-input.json`
+4. Ejecutar: `python3 bin/generar-dictamen.py output/informe-input.json output/informe-clasificacion.pdf`
+5. Enviar el PDF usando la ruta del workspace (NO /tmp): `output/informe-clasificacion.pdf`
 6. Eliminar los archivos temporales de output/
 
 **RUTA DEL PDF**: Siempre guardar en el directorio `output/` dentro del workspace (crear con `mkdir -p output` si no existe). NUNCA guardar en `/tmp/` porque no se puede enviar desde ahi.
@@ -613,7 +613,7 @@ Usuario solicita clasificación
 - `/creditos` - Ver saldo de créditos
 - `/comprar` - Comprar créditos
 - `/tramite <id>` - Continuar trámite específico
-- `/tarifar-informe` - Generar dictamen PDF de la clasificación realizada en esta sesión
+- `/tarifar-informe` - Generar informe PDF de la clasificación realizada en esta sesión
 
 ---
 

@@ -12,7 +12,7 @@ Este script genera PDFs profesionales con el logo de Tarifar, diseño minimalist
 mkdir -p output
 
 # 1. Crear el JSON con los datos de la clasificacion
-cat > output/dictamen-input.json << 'JSONEOF'
+cat > output/informe-input.json << 'JSONEOF'
 {
   "id_tramite": "TAR-2026-XX-XXXX",
   "fecha": "2026-03-08",
@@ -63,9 +63,9 @@ cat > output/dictamen-input.json << 'JSONEOF'
 JSONEOF
 
 # 2. Generar el PDF
-python3 bin/generar-dictamen.py output/dictamen-input.json output/dictamen.pdf
+python3 bin/generar-dictamen.py output/informe-input.json output/informe-clasificacion.pdf
 
-# 3. Enviar al usuario (usar ruta output/dictamen.pdf)
+# 3. Enviar al usuario (usar ruta output/informe-clasificacion.pdf)
 ```
 
 ### REGLAS ABSOLUTAS:

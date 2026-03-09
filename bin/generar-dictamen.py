@@ -496,7 +496,7 @@ def main():
 
     src = sys.argv[1]
     data = json.load(sys.stdin) if src == "-" else json.load(open(src, encoding="utf-8"))
-    out = sys.argv[2] if len(sys.argv) >= 3 else f"/tmp/dictamen-{data.get('id_tramite','out')}-{data.get('fecha', datetime.now().strftime('%Y-%m-%d'))}.pdf"
+    out = sys.argv[2] if len(sys.argv) >= 3 else f"/tmp/informe-clasificacion-{data.get('id_tramite','out')}-{data.get('fecha', datetime.now().strftime('%Y-%m-%d'))}.pdf"
     print(generate(data, out))
 
 
