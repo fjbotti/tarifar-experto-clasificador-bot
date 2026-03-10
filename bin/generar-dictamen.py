@@ -385,6 +385,14 @@ def generate(data, out):
                     c.get("iva", ""),
                     res
                 ], ws_comp, color=color, wrap_col=1)
+                # Show reason for discarding (motivo)
+                motivo = c.get("motivo", "")
+                if motivo and "SELECCIONADA" not in res.upper():
+                    pdf.set_font("Helvetica", "I", 7)
+                    pdf.set_text_color(*pdf.GRAY)
+                    pdf.set_x(pdf.MARGIN + 34)
+                    pdf.multi_cell(total_w - 36, 4, f"Motivo: {motivo}", new_x="LMARGIN", new_y="NEXT")
+                    pdf.ln(1)
         elif excl:
             for e in excl:
                 pdf.set_font("Helvetica", "B", 8)

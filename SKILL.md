@@ -379,8 +379,10 @@ Documenta explícitamente cómo aplicaste cada RGI relevante:
 Lista al menos 2-3 posiciones que **DESCARTASTE** y por qué:
 
 - ❌ **Código descartado**: XXXX.XX.XX
-- **Motivo**: Nota legal X excluye / RGI 3a favorece otra
+- **Motivo**: Nota legal X excluye / RGI 3a favorece otra (OBLIGATORIO: breve explicación)
 - **Referencia**: ID de posición, Nota de Sección/Capítulo/Partida específica
+
+**CRÍTICO para el informe PDF**: Cada posición descartada en el campo `comparativo` del JSON DEBE incluir un campo `"motivo"` con una explicación breve (1-2 oraciones) de por qué se descartó. Sin este campo, el informe queda incompleto. Ejemplo: `"motivo": "La Nota 1 del Cap. 91 excluye productos clasificables en otras partidas"`
 
 **IMPORTANTE**: Si una nota de sección o capítulo excluye expresamente el producto de un capítulo, citar el texto exacto de la nota. Ejemplo: "Excluido por Nota 1.e) del Capítulo 42: los artículos de la partida 64.01"
 
@@ -526,7 +528,7 @@ python3 bin/generar-dictamen.py datos.json /tmp/dictamen.pdf
   ],
   "comparativo": [
     {"posicion": "8517.62.72", "descripcion": "...", "die": "0%", "iva": "10.5%", "resultado": "SELECCIONADA"},
-    {"posicion": "9102.xx", "descripcion": "Relojes", "die": "20%", "iva": "21%", "resultado": "Excl. Nota 1"}
+    {"posicion": "9102.xx", "descripcion": "Relojes", "die": "20%", "iva": "21%", "resultado": "Excl. Nota 1", "motivo": "La Nota 1 del Cap. 91 excluye productos clasificables en otras partidas. El smartwatch clasifica en 8517 por su funcion principal de comunicacion."}
   ],
   "exclusiones": [{"codigo": "XXXX.XX", "motivo": "..."}],
   "aranceles": {
