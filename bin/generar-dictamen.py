@@ -85,13 +85,13 @@ class DictamenPDF(FPDF):
         self.set_y(56)
 
     def section(self, num, title):
-        self.ln(4)
+        self.ln(3)
         self.set_font("Helvetica", "", 8)
         self.set_text_color(*self.ORANGE)
-        self.cell(7, 7, str(num))
+        self.cell(7, 6, str(num))
         self.set_font("Helvetica", "B", 11)
         self.set_text_color(*self.BLUE)
-        self.cell(0, 7, title.upper(), new_x="LMARGIN", new_y="NEXT")
+        self.cell(0, 6, title.upper(), new_x="LMARGIN", new_y="NEXT")
         self.ln(1)
 
     def subsection(self, title):
@@ -141,13 +141,41 @@ class DictamenPDF(FPDF):
             self.cell(widths[i], 6, col.upper(), border=0, fill=True, align="L" if i == 0 else "C")
         self.ln()
 
-    def table_row(self, values, widths, bold=False, color=None, wrap_last=False):
+    def table_row(self, values, widths, bold=False, color=None, wrap_last=False, wrap_col=None):
+        """Render a table row. wrap_col=index wraps that column with multi_cell."""
         self.set_font("Helvetica", "B" if bold else "", 8)
         self.set_text_color(*(color or self.BLACK))
-        if wrap_last and len(values) >= 2:
-            # Fixed columns + wrapping last column
+
+        if wrap_col is not None and 0 <= wrap_col < len(values):
             x0 = self.get_x()
             y0 = self.get_y()
+            # Check page space — if less than 12mm, add page
+            if y0 > self.h - 30:
+                self.add_page()
+                x0 = self.get_x()
+                y0 = self.get_y()
+            # Draw fixed cells
+            for i, val in enumerate(values):
+                if i == wrap_col:
+                    continue
+                self.set_xy(x0 + sum(widths[:i]), y0)
+                txt = str(val)
+                max_chars = int(widths[i] / 2) if widths[i] > 0 else 80
+                if len(txt) > max_chars:
+                    txt = txt[:max_chars - 2] + ".."
+                self.cell(widths[i], 5, txt, align="L" if i == 0 else "C")
+            # Draw wrapped column
+            self.set_xy(x0 + sum(widths[:wrap_col]), y0)
+            self.multi_cell(widths[wrap_col], 5, str(values[wrap_col]), align="L", new_x="LMARGIN", new_y="NEXT")
+            if self.get_y() <= y0 + 5:
+                self.set_y(y0 + 5)
+        elif wrap_last and len(values) >= 2:
+            x0 = self.get_x()
+            y0 = self.get_y()
+            if y0 > self.h - 30:
+                self.add_page()
+                x0 = self.get_x()
+                y0 = self.get_y()
             for i in range(len(values) - 1):
                 self.set_xy(x0 + sum(widths[:i]), y0)
                 txt = str(values[i])[:50]
@@ -158,10 +186,8 @@ class DictamenPDF(FPDF):
             if self.get_y() <= y0 + 5:
                 self.set_y(y0 + 5)
         else:
-            # Simple single-line row (all cells)
             for i, val in enumerate(values):
                 txt = str(val)
-                # Truncate to fit in cell width roughly (1 char ~ 2pt at size 8)
                 max_chars = int(widths[i] / 2) if widths[i] > 0 else 80
                 if len(txt) > max_chars:
                     txt = txt[:max_chars - 2] + ".."
@@ -223,8 +249,8 @@ def generate(data, out):
         ws = [col1_w, col2_w]
         pdf.table_header(["Nivel", "Detalle"], ws)
         for j in jerarquia:
-            pdf.table_row([j.get("nivel", ""), j.get("detalle", "")], ws, wrap_last=True)
-        pdf.ln(2)
+            pdf.table_row([j.get("nivel", ""), j.get("detalle", "")], ws, wrap_col=1)
+        pdf.ln(1)
 
     # Confidence
     pdf.confidence_display(conf)
@@ -358,7 +384,7 @@ def generate(data, out):
                     c.get("die", ""),
                     c.get("iva", ""),
                     res
-                ], ws_comp, color=color, wrap_last=True)
+                ], ws_comp, color=color, wrap_col=1)
         elif excl:
             for e in excl:
                 pdf.set_font("Helvetica", "B", 8)
@@ -383,18 +409,25 @@ def generate(data, out):
             pdf.ln(1)
 
     # ── DISCLAIMER ──
-    pdf.ln(5)
-    pdf.set_draw_color(*pdf.LIGHT_GRAY)
-    pdf.line(pdf.MARGIN, pdf.get_y(), pdf.w - pdf.MARGIN, pdf.get_y())
-    pdf.ln(3)
-    pdf.set_font("Helvetica", "I", 7)
-    pdf.set_text_color(*pdf.GRAY)
-    pdf.multi_cell(0, 4,
+    # If less than 25mm left on page, the disclaimer will fit in footer area
+    # Otherwise place it inline to avoid a near-empty trailing page
+    disclaimer = (
         "Este informe es orientativo y no constituye una consulta vinculante ante la DGA/ARCA. "
         "Para clasificacion con fuerza legal: solicitar Consulta de Clasificacion Arancelaria "
         "ante la DGA (Art. 1100, Ley 22.415). La informacion arancelaria corresponde a la "
-        "vigente al momento de la consulta y puede estar sujeta a modificaciones.",
-        new_x="LMARGIN", new_y="NEXT")
+        "vigente al momento de la consulta y puede estar sujeta a modificaciones."
+    )
+    space_left = pdf.h - pdf.get_y() - 20  # 20mm footer margin
+    if space_left < 22:
+        # Not enough space — add page so it doesn't overlap footer
+        pdf.add_page()
+    pdf.ln(3)
+    pdf.set_draw_color(*pdf.LIGHT_GRAY)
+    pdf.line(pdf.MARGIN, pdf.get_y(), pdf.w - pdf.MARGIN, pdf.get_y())
+    pdf.ln(2)
+    pdf.set_font("Helvetica", "I", 7)
+    pdf.set_text_color(*pdf.GRAY)
+    pdf.multi_cell(0, 4, disclaimer, new_x="LMARGIN", new_y="NEXT")
 
     pdf.output(out)
     return out
