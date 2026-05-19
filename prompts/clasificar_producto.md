@@ -26,6 +26,8 @@ Usa las siguientes herramientas MCP de forma secuencial:
 - Usa `search_notas()` para encontrar notas explicativas del capítulo/partida candidata
 - Busca exclusiones específicas (ej: "Nota 2(b) del Capítulo 85 excluye...")
 - Las notas legales son CRÍTICAS para evitar clasificaciones erróneas
+- No descartes una partida solo porque el encabezamiento no menciona literalmente el producto. Si el encabezamiento usa un término técnico definido (ej: "marfil", "peletería", "partes", "preparaciones", "juegos"), verificá notas legales, complementarias y explicativas antes de excluirla.
+- No uses partidas residuales ("los demás", NES, "no expresados ni comprendidos en otra parte") mientras exista una partida específica plausible sin descartar mediante texto legal o notas. Si el descarte no está documentado, la confianza máxima es 69%.
 
 #### c) Consulta de normativa relevante
 

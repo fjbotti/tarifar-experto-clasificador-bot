@@ -204,6 +204,23 @@ CANDIDATOS RGI 1:
 
 Una vez identificada la(s) posición(es) candidata(s), **SIEMPRE** consultar notas en cascada descendente (de lo general a lo específico). Este paso es **no negociable** — sin notas, no hay clasificación válida.
 
+##### Regla anti-error: no excluir por silencio del encabezamiento
+
+Nunca descartes una partida candidata solo porque el texto visible del encabezamiento no menciona literalmente el producto. Antes de concluir que una mercadería está excluida, verificar si el encabezamiento usa un **término técnico definido** por notas legales, notas complementarias o notas explicativas.
+
+**Procedimiento obligatorio:**
+
+1. Si el texto de partida contiene términos amplios o técnicos (por ejemplo: "marfil", "peletería", "partes", "preparaciones", "juegos", "los demás", "materias similares"), buscar su definición en notas legales de sección/capítulo y notas explicativas de partida.
+2. Tratar las notas legales como vinculantes bajo RGI 1. Si una nota define o amplía un término, esa definición prevalece sobre una lectura literal incompleta del encabezamiento.
+3. Las notas explicativas no sustituyen a las notas legales, pero deben revisarse para confirmar inclusiones/exclusiones y ejemplos.
+4. Solo descartar la partida después de documentar la nota o texto legal que la excluye o después de demostrar que la definición del término técnico no alcanza al producto.
+
+**Ejemplo crítico: dientes de tiburón en bruto**
+
+- No concluir que la partida 0507 no aplica porque el encabezamiento menciona "marfil" pero no "dientes".
+- La Nota Legal 3 del Capítulo 05 define "marfil" para la partida 0507 como los dientes de animales terrestres o marinos.
+- Por lo tanto, dientes de tiburón en bruto deben evaluarse primero como marfil de la partida 0507; no saltar a 0511 como residual sin descartar 0507 mediante notas.
+
 ##### Paso b.1: Identificar Sección
 
 Consultar `references/secciones-capitulos.md` para determinar la sección del capítulo candidato.
@@ -295,6 +312,19 @@ Después de las búsquedas, documentar un mini-resumen:
 ```
 
 **CRÍTICO**: Las notas legales de sección y capítulo tienen **fuerza legal** (RGI 1) y prevalecen sobre la interpretación del texto de partida. Una nota de exclusión puede invalidar completamente una clasificación que parecía correcta por el texto. Si se detecta una exclusión, DETENERSE y reclasificar antes de continuar.
+
+##### Uso de partidas residuales ("los demás", NES, no expresados ni comprendidos en otra parte)
+
+Las partidas residuales solo pueden usarse después de agotar y descartar fundadamente las partidas específicas candidatas.
+
+Antes de elegir una partida residual, verificar y documentar:
+
+1. Qué partida(s) específica(s) se consideraron.
+2. Qué notas legales, notas complementarias o notas explicativas fueron consultadas para cada candidata específica.
+3. Por qué esas candidatas no incluyen el producto.
+4. Por qué la residual es legalmente el destino correcto.
+
+**Bloqueo de confianza:** si existe una partida específica plausible y no fue descartada mediante notas/texto legal, la clasificación en una partida residual queda bloqueada con confianza máxima 69% y se debe seguir investigando o pedir información.
 
 ##### Seguimiento de Cadenas de Exclusión
 

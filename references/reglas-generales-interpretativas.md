@@ -14,6 +14,8 @@ Debes clasificar la mercadería aplicando estrictamente las Reglas Generales de 
    - Analizar los textos de partidas.
    - Analizar las notas legales de sección y capítulo.
    - No clasificar por nombre comercial, sino por naturaleza, composición, función, uso principal, forma de presentación y estado de la mercadería.
+   - No descartar una partida por ausencia literal del nombre del producto en el encabezamiento si la partida usa un término técnico definido por notas. Primero verificar definiciones, inclusiones y exclusiones en notas legales, notas complementarias y notas explicativas.
+   - No pasar a una partida residual ("los demás", NES, "no expresados ni comprendidos en otra parte") mientras exista una partida específica plausible sin descartar fundadamente por texto legal o notas.
 
 2. **Si corresponde, aplicar la RGI 2:**
    - **RGI 2.a:** productos incompletos, sin terminar, desmontados o sin montar que conserven el carácter esencial del producto completo.
@@ -41,6 +43,14 @@ Las reglas y validaciones se aplican en cascada por nivel de posición arancelar
 5. **SIM**: seleccionar el desdoblamiento SIM de 11 dígitos, validando descripción, observaciones, intervenciones y requisitos específicos.
 
 En cada nivel se deben comparar solo alternativas del mismo nivel, descartar fundadamente las no aplicables y recién después avanzar al nivel siguiente.
+
+## Control especial: términos técnicos y partidas residuales
+
+Cuando una partida candidata use un término técnico o de alcance legal definido (por ejemplo "marfil", "peletería", "partes", "preparaciones", "juegos" o expresiones similares), el alcance real de la partida se determina por las notas legales y complementarias aplicables, no solo por la lectura literal del encabezamiento.
+
+Ejemplo: para la partida 0507, "marfil" no debe interpretarse solo como colmillos de elefante si una nota legal del Capítulo 05 define el término con mayor amplitud. Si la nota incluye dientes de animales terrestres o marinos, los dientes de tiburón deben evaluarse dentro de 0507 antes de considerar partidas residuales como 0511.
+
+Una partida residual solo es válida cuando todas las partidas específicas plausibles fueron comparadas y descartadas con fundamento legal. Si ese descarte no está documentado, la residual no puede superar 69% de confianza.
 
 ## Texto oficial resumido de las RGI
 
